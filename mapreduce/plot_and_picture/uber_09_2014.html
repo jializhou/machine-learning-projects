@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Data Layer: Dynamic Styling</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+
+    <script>
+
+        //   console.log(123);
+var map;
+function initMap() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    zoom: 10,
+    center: {lat: 40.7529, lng: -73.9942}
+  });
+
+  // Load GeoJSON.
+  var stateLayer = new google.maps.Data();
+  stateLayer.loadGeoJson('https://raw.githubusercontent.com/jializhou/big-data-project/master/ny_with_color_sep_2014_uber.geojson');
+
+  // [START snippet]
+  // Color each letter gray. Change the color when the isColorful property
+  // is set to true.
+  stateLayer.setStyle(function(feature) {
+    //   console.log(feature.getGeometry('type'));
+    console.log(feature.getProperty('color'));
+    return /** @type {google.maps.Data.StyleOptions} */({
+
+    //   fill-opacity="1.0"
+        // fill: <color>
+      fillOpacity: 0.95,
+      fillColor: getColor(feature.getProperty('color')),
+      strokeColor: getColor(feature.getProperty('color')),
+      strokeWeight: 2,
+    });
+});
+  stateLayer.setMap(map)
+
+  // "color": "#68ffa8"
+  // "color": "#67cc92"
+  // "color": "#9bffc6"
+  // "color": "#67cc92"
+
+
+  // [END snippet]
+}
+
+function getColor(num) {
+    return num == 1 ? '#f7cee8':
+    num == 2 ? '#ee9cd1':
+    num == 3 ? '#e56ab9':
+    num == 4 ? '#df48aa':
+    num == 5 ? '#da279a':
+    num == 6 ? '#b92083':
+    num == 7 ? '#981a6b':
+    num == 8 ? '#761454':
+    '##440c30';
+}
+//
+// function getColor(num) {
+//     return num == 1 ? '#dfdbe5':
+//     num == 2 ? '#b1a6bf':
+//     num == 3 ? '#827098':
+//     num == 4 ? '#634d7f':
+//     num == 5 ? '#634d7f':
+//     num == 6 ? '#4f3d65':
+//     num == 7 ? '#3b2e4c':
+//     num == 8 ? '#271e32':
+//     '#000000';
+// }
+
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCjJLJEh3ImB_AfkFAR7VkbozYT4PQtmb0&signed_in=true&callback=initMap"></script>
+  </body>
+</html>
